@@ -1,0 +1,18 @@
+<html>
+<head>
+	<title>Realtime notification popup with nodejs</title>
+	<meta charset="utf-8"/>
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="assets/rt_nodejs_notifier.js"></script>
+	<script src="assets/parent-site-embed.js?frameid=ifrm"></script>
+</head>
+<body>
+<div id="header"><h1>RealTime Notification Popup</h1></div>
+<div style="border:1px solid #dadada;display:inline-block;">
+<iframe src="form.html" scrolling="no" name="ifrm" id="ifrm" frameborder="0" width="100%"></iframe>
+</div>
+<script>
+(new rt_nodejs_notifier('http://mighty-retreat-4105.herokuapp.com','80')).init_from_parent();
+</script>
+</body>
+</html>

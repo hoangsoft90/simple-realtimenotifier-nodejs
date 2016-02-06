@@ -1,0 +1,243 @@
+<html>
+<head>
+	<title>Realtime notification popup with nodejs</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="assets/shCore.css">
+	<link rel="stylesheet" type="text/css" href="assets/shThemeDefault.css">
+	
+	<script src="assets/shCore.js"></script>
+	<script src="assets/shBrushJScript.js"></script>
+	<script src="assets/shBrushPlain.js"></script>
+	<script src="assets/shBrushPhp.js"></script>
+</head>
+<body>
+<div id="header">
+	<h1>Realtime Notification Popup</h1>
+	<span class="slogan">realtime notification with nodejs + javascript</span>
+</div>
+<div id="wrapper">
+<!-- -------------------------------------------------------------------------- -->
+<p>
+<h1>Introducion</h1>
+- To get realtime notification for each client , require you to have a server to receive and emit to clients who connect to. <br/>
+- To the language server, I'm using nodejs, one of the well-known server language and easy programming for beginners or experts.<br/>
+- Server: you have to hire your own VPS or use the free server like <a href="http://heroku.com">heroku</a> (in this article use: <a href="https://heroku.com/">heroku</a>)
+</p>
+<!-- -------------------------------------------------------------------------- -->
+<p>
+<h2>Register free host with heroku</h2>
+-Registry heroku account is very simple, just go http://heroku.com ->press sign up (if you don't have a account) and do fllowing instructions. I't is free for some limitation but for this app you don't worry about this i't so enough to use free.<br/>
+You must complete the bellow jobs:<br/>
+<ul>
+	<li>Create a app for my nodejs script use.</li>
+	<li>Install nodejs on your heroku account that created recent.</li>
+	<li>Upload our nodejs script with extension .js.</li>
+</ul>
+see detail: <a href="heroku.html">click Here.</a>
+</p>
+<!-- -------------------------------------------------------------------------- -->
+<p>
+<h1>Uage</h1>
+[form.html]<br/>
+-put 2 script tag to main page which run this page on parent window (self window) or you can embed this page in iframe, such as form for user recoding:<br/>
+<pre class="brush: plain">
+<script src="/js/rt_nodejs_notifier.js"></script> <!-- realtime notification -->
+<script src="/js/inside-frame-embed.js"></script>	<!-- if this page embed in iframe -->
+</pre>
+
+</p>
+-example of support form help to keep customer on website and announce this form data information to all clients who viewing on the page:<br/>
+
+<pre class="brush: plain">
+<form method="post" action="action.php">
+<table>
+	<tr>
+		<td>Fullname</td>
+		<td><input type="text" name="fullname"/></td>
+	</tr>
+	<tr>
+		<td>Age</td>
+		<td><input type="text" name="age"/></td>
+	</tr>
+	<tr>
+		<td>Job</td>
+		<td><input type="text" name="job"/></td>
+	</tr>
+	<tr>
+		<td>Hobby</td>
+		<td><textarea name="bobby"></textarea></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><input type="submit" name="submit" value="Submit"/></td>
+	</tr>
+</table>
+</form>
+
+</pre>
+<p>
+-listen to server for response message.<br/>
+<pre class="brush: js">
+//instance
+(noti=new rt_nodejs_notifier('http://mighty-retreat-4105.herokuapp.com','80')).init();
+</pre>
+<b>Note</b>:<br/>
+-note that for heroku server, default the port alway use 80.<br/>
+</p>
+<strong>Play sound when message incomming.</strong><br/>
+-You can change any sound you wish.<br/>
+
+<pre class="brush:js">
+//to change sound message
+var noti=new rt_nodejs_notifier('http://mighty-retreat-4105.herokuapp.com','80');
+noti.sound_url='http://example.com/message.mp3';
+noti.enabled_sound=false;		//disable sound when showing message. Enabled by default
+noti.init();
+</pre>
+
+Example of form.html:<br/>
+<textarea rows="20" cols="100" readonly="true">
+<html>
+<head>
+	<title>Form record user</title>
+	<meta charset="utf-8"/>
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="assets/js/rt_nodejs_notifier.js"></script>
+	<script src="assets/js/inside-frame-embed.js"></script>
+	<style>
+	body{margin:0px;padding:0px;}
+	</style>
+</head>
+<body>
+<a href="javascript:noti.test_randome_new_register();" onclick="">set new record</a>
+<form method="post" action="action.php">
+<table>
+	<tr>
+		<td>Fullname</td>
+		<td><input type="text" name="fullname"/></td>
+	</tr>
+	<tr>
+		<td>Age</td>
+		<td><input type="text" name="age"/></td>
+	</tr>
+	<tr>
+		<td>Job</td>
+		<td><input type="text" name="job"/></td>
+	</tr>
+	<tr>
+		<td>Hobby</td>
+		<td>< textarea name="bobby"></ textarea></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><input type="submit" name="submit" value="Submit"/></td>
+	</tr>
+</table>
+</form>
+<script>
+var noti;
+//instance
+(noti=new rt_nodejs_notifier('http://mighty-retreat-4105.herokuapp.com','80')).init();//child run as parent
+</script>
+</body>
+</html>
+</textarea><br/>
+<b>Note:</b><br/>
+<ul>
+	<li>For Embed page you should set css of margin:0px; padding:0px; so fit page into iframe.</li>
+</ul>
+<p>
+<h3>Recording Form (form action)</h3>
+[action.php]<br/>
+-In this case, I will get form data when user fill the form and press submit button, this information will showing in notification message popup. <br/>
+-And all clients who surfing to the site will receive notification in real-time<br/>
+<pre class="brush: js">
+(new rt_nodejs_notifier('http://mighty-retreat-4105.herokuapp.com','80')).init(function(p){
+		p.announce_new_customer_record('< ?php echo json_encode($_POST)? >');	//emit message to all
+	});
+
+</pre>
+<b>note:</b>
+<ul>
+	<li>creator of notification popup is function name 'vcn_create_notification_item' which find at 'js/notification-utilities.js', customize them and remember that argument of this function same argument of method 'announce_new_customer_record'</li>
+	
+</ul>
+</p>
+Example of action.php <br/>
+<textarea rows="20" cols="100" readonly="true">
+<html>
+<head>
+	<title>Realtime notification popup with nodejs (action)</title>
+	<meta charset="utf-8"/>
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="assets/js/rt_nodejs_notifier.js"></script>
+	<script src="assets/js/inside-frame-embed.js"></script>
+</head>
+<body>
+<?php 
+if(isset($_POST['submit'])){
+	var_dump($_POST);
+	?>
+	<script>
+	(new rt_nodejs_notifier('http://mighty-retreat-4105.herokuapp.com','80')).init(function(p){
+		p.announce_new_customer_record('<?php echo json_encode($_POST)?>');	//emit message to all
+	});
+	
+	</script>
+	<?php
+}
+?>
+</body>
+</html>
+</textarea>
+<p>
+<h1>Embed in Iframe</h1>
+-As mentioned above, form registration put in iframe is one of best choice to come to any satelite of your website.<br/>
+[embed.html]<br/>
+step1: add 2 script tag to parent page.<br/>
+<pre class="brush: plain">
+	<script src="assets/js/rt_nodejs_notifier.js"></script>
+	<script src="assets/js/parent-site-embed.js?frameid=ifrm"></script>
+</pre>
+note:
+<ul>
+	<li>Pass parameter of frameid for iframe id.</li>
+</ul>
+step 2: Add iframe tag:<br/>
+<pre class="brush: plain">
+	<iframe src="form.html" scrolling="no" name="ifrm" id="ifrm" frameborder="0" width="100%"></iframe>
+</pre>
+step 3: init notification.<br/>
+<pre class="brush: js">
+(new rt_nodejs_notifier('http://mighty-retreat-4105.herokuapp.com','80')).init_from_parent();
+</pre>
+</p>
+Example of embed.html:<br/>
+<textarea rows="20" cols="100" readonly="true">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+	<title>Realtime notification popup with nodejs</title>
+	<meta charset="utf-8"/>
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="assets/js/rt_nodejs_notifier.js"></script>
+	<script src="assets/js/parent-site-embed.js?frameid=ifrm"></script>
+</head>
+<body>
+<div style="border:1px solid red;">
+<iframe src="form.html" scrolling="no" name="ifrm" id="ifrm" frameborder="0" width="100%"></iframe>
+</div>
+<script>
+(new rt_nodejs_notifier('http://mighty-retreat-4105.herokuapp.com','80')).init_from_parent();
+</script>
+</body>
+</html>
+</textarea>
+<p>Thank you !</p>
+</div>
+<script>
+SyntaxHighlighter.all();
+</script>
+</body>
+</html>

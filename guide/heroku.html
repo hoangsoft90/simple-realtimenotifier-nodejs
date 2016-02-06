@@ -1,0 +1,79 @@
+<html>
+<head>
+	<title>Realtime notification popup with nodejs</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="assets/shCore.css">
+	<link rel="stylesheet" type="text/css" href="assets/shThemeDefault.css">
+	
+	<script src="assets/shCore.js"></script>
+	<script src="assets/shBrushJScript.js"></script>
+	<script src="assets/shBrushPlain.js"></script>
+	<script src="assets/shBrushPhp.js"></script>
+</head>
+<body>
+<div id="header">
+	<h1>Realtime Notification Popup</h1>
+	<span class="slogan">realtime notification with nodejs + javascript</span>
+</div>
+<div id="wrapper">
+<p>
+Nodejs là gì? <br/>
+-Nodejs là ngôn ngữ lập trình phía server, khác với javascript hoạt động trên client. Điểm thú vị là Nodejs hoàn toàn sử dụng ngôn ngữ js để lập trình nên khác linh hoạt và dễ dàng dành cho những ai đã không lạ với ngôn ngữ lập trình web javascript.<br/>
+-Bài viết này sẽ hướng dẫn bạn đăng ký 1 tài khoản miễn phí heroku và tạo 1 ứng dụng để làm thông báo thời gian thực.<br/>
+<p/>
+<h2>Tạo tài khoản</h2>
+-Việc tạo một tài khoản heroku khá đơn giản , chỉ việc truy vập: http://heroku.com ->nhấn vào "sign up" rồi làm theo hướng dẫn.<br/>
+
+<h2>Cài đặt nodejs lên heroku</h2>
+-Tham khảo một số trợ giúp hướng dẫn từ heroku để tạo ứng dụng nodejs.<br/><br/>
+
+Tham khảo:<br/>
+<ul>
+	<li><a href="https://devcenter.heroku.com/articles/node-websockets" target="_blank">https://devcenter.heroku.com/articles/node-websockets</a></li>
+	<li><a href="https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku" target="_blank">https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku</a></li>
+	<li><a href="https://github.com/heroku/node-js-sample" target="_blank">https://github.com/heroku/node-js-sample</a></li>
+	<li><a href="https://github.com/lstoll/socket-io-chat-heroku" target="_blank">https://github.com/lstoll/socket-io-chat-heroku</a></li>
+</ul>
+<h2>Tạo file nodejs server notification</h2>
+-Tạo nodejs file tên: notification.js, copy & paste fllowing code:
+<pre class="brush:js">
+var http=require('http');
+var server=http.createServer(function(req,res){
+	res.writeHead(200,{"Content-Tye":"text/html"});
+	res.write('test notification');
+	res.end();
+});
+var port=Number(process.env.PORT || 5000);
+//socket.io
+var io=require('socket.io').listen(server.listen(port));
+io.configure(function(){
+	io.set("transports",["xhr-polling"]);
+	io.set("polling duration",10);
+});
+//connection event
+io.sockets.on('connection',function(socket){
+	//limit ip address
+	if(host.origin.indexOf('domain1')==0
+	&& host.origin.indexOf('domain2')==0
+	&& host.origin.indexOf('domain3')==0)
+	{
+		console.log('deny form '+host.origin);
+		return;
+	}
+	socket.on('new_customer_record_notify',function(d){
+		console.log('announce to all client that viewing that site');
+		io.sockets.emit('_new_customer_record_notify',d);
+	});
+});
+console.log('->listening on port'+port);
+</pre>
+-Liệt kê 1 số backlist domains không cho phép gửi tin nhắn _new_customer_record_notify tới server, bạn chỉ nên cho phép 1 số web được bạn cho phép để hiển thị notify đến tất cả những web đó.<br/>
+-Cuối cùng upload file này lên ứng dụng heroku của bạn và chạy.
+<p>Chúc bạn thành công !</p>
+</div>
+<script>
+SyntaxHighlighter.all();
+</script>
+</body>
+</html>

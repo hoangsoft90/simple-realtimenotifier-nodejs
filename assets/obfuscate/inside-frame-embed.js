@@ -1,0 +1,1 @@
+jQuery(function(c){var d=window.addEventListener?"addEventListener":"attachEvent";var b=window[d];var a=d=="attachEvent"?"onmessage":"message";b(a,function(g){if(g.data){var f=0,h=0;h=c(document).find("body").height()+0;if(h!=f){g.source.postMessage({service:"adjust-frame-height",height:(f=h)+"px"},g.origin)}}if(g.origin=="http://iframe.example.com"){alert(g.data)}},false)});

@@ -1,0 +1,52 @@
+<html>
+<head>
+	<title>Form record user</title>
+	<meta charset="utf-8"/>
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="assets/rt_nodejs_notifier.js"></script>
+	<script src="assets/inside-frame-embed.js"></script>
+	<style>
+	body{margin:0px;padding:0px;background:#fafafa;}
+	</style>
+</head>
+<body>
+<div><strong>Fill in the form and hit submit to see result.</strong></div>
+<form method="post" action="action.php">
+<table>
+	<tr>
+		<td>Fullname</td>
+		<td><input type="text" name="fullname"/></td>
+	</tr>
+	<tr>
+		<td>Age</td>
+		<td><input type="text" name="age"/></td>
+	</tr>
+	<tr>
+		<td>Job</td>
+		<td><input type="text" name="job"/></td>
+	</tr>
+	<tr>
+		<td>Hobby</td>
+		<td><textarea name="bobby"></textarea></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><input type="submit" name="submit" value="Submit"/></td>
+	</tr>
+</table>
+</form>
+<hr/>
+You can test notification now by press the bellow button:<br/>
+<button class="button" style="padding:5px;" onclick="noti.test_randome_new_register();" >Test notification message</button>
+<br/><b>Note:</b><br/>
+<ul>
+	<li>Sorry if the message returns delayed by using the free host heroku.com</li>
+</ul>
+<script>
+var noti;
+//instance
+var rt=(noti=new rt_nodejs_notifier('http://mighty-retreat-4105.herokuapp.com','80')).init();//child run as parent
+//rt.sound_url='http://localhost:81/realtimenotifier/assets/js/message.mp3';
+</script>
+</body>
+</html>
